@@ -13,7 +13,7 @@
 //#define PORT 1050 //FOR TURN IN
 #define PORT 1077
 #define SERVER_IP "131.247.3.8"
-#define BUFFERSIZE 16;
+#define BUFFERSIZE 16
 char sharedArray[BUFFERSIZE];
 sem_t semaphore;
 
