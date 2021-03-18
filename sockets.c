@@ -71,9 +71,9 @@ int main(int argc, char const *argv[]) {
 
   serverInfo.sin_family = AF_INET;
   serverInfo.sin_port = htons(PORT);
-  serverInfo.sin_addr = inet_addr(SERVER_IP);
+  serverInfo.sin_addr.s_addr = inet_addr(SERVER_IP);
 
-  if(bind(clientServer, (struct sockaddr *)&serverInfo, sizeof(address)) < 0)
+  if(bind(clientServer, (struct sockaddr *)&serverInfo, sizeof(serverInfo)) < 0)
   {
     perror("Binding of the socket failed\n");
     exit(1);
