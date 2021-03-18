@@ -27,7 +27,7 @@ explicit library calls are required depending on the OS.
 //#define PORT_NUM 1050
 //#define PORT_NUM 1159
 //#define PORT_NUM 1051
-#define PORT_NUM 1050
+#define PORT_NUM 1077
 #define BUFFLEN 100
 
 int  main(int argc, char *argv[])
