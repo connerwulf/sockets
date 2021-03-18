@@ -8,6 +8,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <semaphore.h>
+#include <pthread.h>
 
 //PORT AND IP CONGIFURATION
 //#define PORT 1050 //FOR TURN IN
