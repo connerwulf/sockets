@@ -12,9 +12,9 @@
 //PORT AND IP CONGIFURATION
 //#define PORT 1050 //FOR TURN IN
 #define PORT 1077
-#define SERVER_IP 131.247.3.8
-
-char sharedArray[16];
+#define SERVER_IP "131.247.3.8"
+#define BUFFERSIZE 16;
+char sharedArray[BUFFERSIZE];
 sem_t semaphore;
 
 
@@ -23,18 +23,18 @@ sem_t semaphore;
 void * t_socket(void *arg)
 {
   int sock = *((int *)arg);
-  char temp[16];
-  recv(sock, temp, 16, 0);
+  char temp[BUFFERSIZE];
+  recv(sock, temp, BUFFERSIZE, 0);
 
   sem_wait(&semaphore);
     /* Critical Section */
-    sharedArray = temp;
+    strncpy(sharedArray, temp, BUFFERSIZE);
     sleep(2);
-    send(sock, sharedArray, 16, 0);
+    send(sock, sharedArray, BUFFERSIZE, 0);
   sem_post(&semaphore);
 
   close(sock);
-  printf("\nThread is done\n")
+  printf("\nThread is done\n");
   return(NULL);
 }
 
@@ -43,7 +43,7 @@ void * t_socket(void *arg)
 
 
 
-int int main(int argc, char const *argv[]) {
+int main(int argc, char const *argv[]) {
 
   sem_init(&semaphore,0,1);
   int clientServer;
@@ -52,7 +52,7 @@ int int main(int argc, char const *argv[]) {
   socklen_t addressSize;
 
 
-  if(clientServer = socket(AF_INET, SOCK_STREAM) == 0)
+  if(clientServer = socket(AF_INET, SOCK_STREAM, 0) == 0)
   {
     perror("Socket function failed.\n");
     exit(1);
