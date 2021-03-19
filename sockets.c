@@ -52,15 +52,16 @@ int main(int argc, char const *argv[]) {
   struct sockaddr_storage storage;
   socklen_t addressSize;
 
-
+  printf("creating socket\n");
   if((clientServer = socket(AF_INET, SOCK_STREAM, 0)) == 0)
   {
     perror("Socket function failed.\n");
     exit(1);
   }
-
+printf(" socket created\n");
   /* This makes sure the port is immediately released when this code is done. */
   int on = 1;
+
 
 /* This should free the socket right away */
   if (setsockopt(clientServer, SOL_SOCKET, SO_REUSEADDR, (char*)&on, sizeof(on)) < 0)
@@ -73,13 +74,14 @@ int main(int argc, char const *argv[]) {
   serverInfo.sin_family = AF_INET;
   serverInfo.sin_port = htons(PORT);
   serverInfo.sin_addr.s_addr = inet_addr(SERVER_IP);
-
+printf("binding...\n");
   if(bind(clientServer, (struct sockaddr *)&serverInfo, sizeof(serverInfo)) < 0)
   {
     perror("Binding of the socket failed\n");
     exit(1);
   }
-
+printf("binded...\n");
+printf("listening...\n");
   if(listen(clientServer, 3)< 0)
   {
       perror("Listening Failed\n");
