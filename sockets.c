@@ -30,6 +30,7 @@ void * t_socket(void *arg)
   sem_wait(&semaphore);
     /* Critical Section */
     strncpy(sharedArray, temp, BUFFERSIZE);
+    printf("\n%s\n", sharedArray);
     sleep(2);
     send(sock, sharedArray, BUFFERSIZE, 0);
   sem_post(&semaphore);
