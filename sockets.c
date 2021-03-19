@@ -12,7 +12,7 @@
 
 //PORT AND IP CONGIFURATION
 //#define PORT 1050 //FOR TURN IN
-#define PORT 1091
+#define PORT 1077
 #define SERVER_IP "131.247.3.8"
 #define BUFFERSIZE 16
 char sharedArray[BUFFERSIZE];
@@ -50,7 +50,7 @@ int main(int argc, char const *argv[]) {
   int clientServer;
   struct sockaddr_in serverInfo;
   struct sockaddr_storage storage;
-  socklen_t addressSize;
+
 
   printf("creating socket\n");
   if((clientServer = socket(AF_INET, SOCK_STREAM, 0)) == 0)
@@ -75,7 +75,7 @@ printf(" socket created\n");
   serverInfo.sin_port = htons(PORT);
   serverInfo.sin_addr.s_addr = inet_addr(SERVER_IP);
 printf("binding...\n");
-  if(bind(clientServer, (struct sockaddr *)&serverInfo, sizeof(serverInfo)) < 0)
+  if(bind(clientServer, (struct sockaddr*)&serverInfo, sizeof(serverInfo)) < 0)
   {
     perror("Binding of the socket failed\n");
     exit(1);
@@ -91,10 +91,12 @@ printf("listening...\n");
   int maxCon = 3;
   int curCon = 0;
   int acceptedSocket;
+  int addressSize;
   pthread_t sThread[3];
+
   while(curCon < maxCon)
   {
-      addressSize = sizeof storage;
+      addressSize = sizeof(storage);
       printf("accpeting...\n");
       acceptedSocket = accept(clientServer, (struct sockaddr *) &storage, &addressSize);
       printf("accpeted...\n");
@@ -109,7 +111,7 @@ printf("listening...\n");
   {
     pthread_join(sThread[g], NULL);
   }
-
+  close(clientServer);
   printf("\nServer Program Finished\n");
   exit(0);
 
