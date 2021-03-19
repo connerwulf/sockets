@@ -11,32 +11,36 @@
 #include <pthread.h>
 
 //PORT AND IP CONGIFURATION
-//#define PORT 1050 //FOR TURN IN
-#define PORT 1079
+#define PORT 1050
 #define SERVER_IP "131.247.3.8"
 #define BUFFERSIZE 15
+
+//Shared memory
 char sharedArray[BUFFERSIZE];
 sem_t semaphore;
 
 
 
-
+//Thread function to save message to sharedArray
 void * t_socket(void *arg)
 {
   int sock = *((int *)arg);
   char temp[BUFFERSIZE];
-  recv(sock, temp, BUFFERSIZE, 0);
+
 
   sem_wait(&semaphore);
-    /* Critical Section */
-    strncpy(sharedArray, temp, BUFFERSIZE);
-    printf("\n%s\n", sharedArray);
-    sleep(2);
-    send(sock, sharedArray, BUFFERSIZE, 0);
+    /* Critical Section Starts*/
+    //Receieve message save to sharedArray and copy to temp array
+    recv(sock, sharedArray, BUFFERSIZE, 0);
+    strncpy(temp, sharedArray, BUFFERSIZE);
+      /* Critical Section Ends*/
   sem_post(&semaphore);
 
+  sleep(2);
+
+  //send message back to client after 2 secs
+  send(sock, temp, BUFFERSIZE, 0);
   close(sock);
-  printf("\nThread is done\n");
   return(NULL);
 }
 
@@ -48,46 +52,51 @@ void * t_socket(void *arg)
 int main(int argc, char const *argv[]) {
 
   sem_init(&semaphore,0,1);
-  int clientServer;
+  int server;
   struct sockaddr_in serverInfo;
   struct sockaddr_storage storage;
 
 
-  printf("creating socket\n");
-  if((clientServer = socket(AF_INET, SOCK_STREAM, 0)) == 0)
+  //Server creates endpoint for communication with client
+  if((server = socket(AF_INET, SOCK_STREAM, 0)) == 0)
   {
     perror("Socket function failed.\n");
     exit(1);
   }
-printf(" socket created\n");
+
+  //PROVIDED CODE
   /* This makes sure the port is immediately released when this code is done. */
   int on = 1;
 
 
 /* This should free the socket right away */
-  if (setsockopt(clientServer, SOL_SOCKET, SO_REUSEADDR, (char*)&on, sizeof(on)) < 0)
+  if (setsockopt(server, SOL_SOCKET, SO_REUSEADDR, (char*)&on, sizeof(on)) < 0)
   {
     perror("Stream Socket option set failed.\n");
     exit(1);
             /* some error has occurred, etc */
   }
-
+//END OF PROVIDED CODE
+  //Populated needed information to communicate over internet addressess
   serverInfo.sin_family = AF_INET;
   serverInfo.sin_port = htons(PORT);
   serverInfo.sin_addr.s_addr = inet_addr(SERVER_IP);
-printf("binding...\n");
-  if(bind(clientServer, (struct sockaddr*)&serverInfo, sizeof(serverInfo)) < 0)
+
+  //Assigning the address specific to the server socket
+  if(bind(server, (struct sockaddr*)&serverInfo, sizeof(serverInfo)) < 0)
   {
     perror("Binding of the socket failed\n");
     exit(1);
   }
-printf("binded...\n");
-printf("listening...\n");
-  if(listen(clientServer, 3)< 0)
+
+  //Set bound for number of connections that can be queue for our socket
+  if(listen(server, 3)< 0)
   {
       perror("Listening Failed\n");
       exit(1);
   }
+  printf("listening...\n");
+
 
   int maxCon = 3;
   int curCon = 0;
@@ -95,12 +104,16 @@ printf("listening...\n");
   socklen_t addressSize;
   pthread_t sThread[3];
 
+  //Loop through n connections, where n is 3
   while(curCon < maxCon)
   {
       addressSize = sizeof(storage);
       printf("accpeting...\n");
-      acceptedSocket = accept(clientServer, (struct sockaddr *) &storage, &addressSize);
-      printf("accpeted...\n");
+      //Waits and accepts first pending connection from the listening socket
+      acceptedSocket = accept(server, (struct sockaddr *) &storage, &addressSize);
+      printf("accpeted.\n");
+
+      //Create thread to save message and reply to client
       if(pthread_create(&sThread[curCon], NULL, t_socket, &acceptedSocket) != 0)
       {
         printf("Failed trying to create a thread\n");
@@ -112,7 +125,7 @@ printf("listening...\n");
   {
     pthread_join(sThread[g], NULL);
   }
-  close(clientServer);
+  close(server);
   printf("\nServer Program Finished\n");
   exit(0);
 
