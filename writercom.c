@@ -2,7 +2,7 @@
  and waiting for its return.  The server must be running on netcluster (but
 could run on c4labpc20, 131.247.3.99) in
 this version.  This writer can run anywhere. 
-gcc writern.c -lsocket -lxnet
+
 clang does not want any libraries included (there by default)
 explicit library calls are required depending on the OS.
 

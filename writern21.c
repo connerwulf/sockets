@@ -22,7 +22,7 @@ need the libraries for c4labpc24... Updated 3/13/21 */
                                     must run */
 /* For test #define PORT_NUM 1150 */
 /* #define PORT_NUM 1050 */
-#define PORT_NUM 1044
+#define PORT_NUM 1077
 #define BUFFLEN 100
 
 int  main(int argc, char *argv[])
@@ -34,23 +34,26 @@ int  main(int argc, char *argv[])
 	int fd;
 	char buf[BUFFLEN];
 	/* socket() call generates one socket for ipc */
+	printf("creating socket\n");
 	if ( (sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 	{
 		perror("Opening Stream Socket");
 		exit(1);
 	}
+	printf("socket created \n");
 
 	/* address naming for the internet domain socket */
 	server.sin_family = AF_INET;
       	server.sin_port = htons(PORT_NUM);
       	server.sin_addr.s_addr = inet_addr(IP_ADDR);
 
+    printf("connecting\n");
 	/* use the socket and server address to initiate connection */
 	if( connect(sock, (struct sockaddr*)&server, sizeof(server))<0)	{
 		perror("connecting stream socket");
 		exit(1);
 	}
-
+	printf("connected\n");
 
 	/* using open() system call to be consistent with write() and send(),etc. */
 	if ( (fd = open("infile", O_RDONLY)) == 0)
