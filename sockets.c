@@ -75,7 +75,7 @@ printf(" socket created\n");
   serverInfo.sin_port = htons(PORT);
   serverInfo.sin_addr.s_addr = inet_addr(SERVER_IP);
 printf("binding...\n");
-  if(bind(clientServer, (struct sockaddr *)&serverInfo, sizeof(serverInfo)) < 0)
+  if(bind(clientServer, (struct sockaddr*)&serverInfo, sizeof(serverInfo)) < 0)
   {
     perror("Binding of the socket failed\n");
     exit(1);
@@ -94,7 +94,7 @@ printf("listening...\n");
   pthread_t sThread[3];
   while(curCon < maxCon)
   {
-      addressSize = sizeof storage;
+      addressSize = sizeof(storage);
       printf("accpeting...\n");
       acceptedSocket = accept(clientServer, (struct sockaddr *) &storage, &addressSize);
       printf("accpeted...\n");
