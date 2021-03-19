@@ -53,7 +53,7 @@ int main(int argc, char const *argv[]) {
   socklen_t addressSize;
 
 
-  if(clientServer = socket(AF_INET, SOCK_STREAM, 0) == 0)
+  if((clientServer = socket(AF_INET, SOCK_STREAM, 0)) == 0)
   {
     perror("Socket function failed.\n");
     exit(1);
