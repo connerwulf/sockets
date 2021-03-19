@@ -22,7 +22,7 @@ need the libraries for c4labpc24... Updated 3/13/21 */
                                     must run */
 /* For test #define PORT_NUM 1150 */
 /* #define PORT_NUM 1050 */
-#define PORT_NUM 1077
+#define PORT_NUM 1091
 #define BUFFLEN 100
 
 int  main(int argc, char *argv[])
