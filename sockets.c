@@ -19,7 +19,7 @@
 char sharedArray[BUFFERSIZE];
 sem_t semaphore;
 
-
+//Student: Conner Wulf
 
 //Thread function to save message to sharedArray
 void * t_socket(void *arg)
@@ -43,10 +43,6 @@ void * t_socket(void *arg)
   close(sock);
   return(NULL);
 }
-
-
-
-
 
 
 int main(int argc, char const *argv[]) {
