@@ -95,8 +95,9 @@ printf("listening...\n");
   while(curCon < maxCon)
   {
       addressSize = sizeof storage;
+      printf("accpeting...\n");
       acceptedSocket = accept(clientServer, (struct sockaddr *) &storage, &addressSize);
-
+      printf("accpeted...\n");
       if(pthread_create(&sThread[curCon], NULL, t_socket, &acceptedSocket) != 0)
       {
         printf("Failed trying to create a thread\n");
