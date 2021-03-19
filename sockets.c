@@ -50,7 +50,7 @@ int main(int argc, char const *argv[]) {
   int clientServer;
   struct sockaddr_in serverInfo;
   struct sockaddr_storage storage;
-  socklen_t addressSize;
+
 
   printf("creating socket\n");
   if((clientServer = socket(AF_INET, SOCK_STREAM, 0)) == 0)
@@ -91,7 +91,9 @@ printf("listening...\n");
   int maxCon = 3;
   int curCon = 0;
   int acceptedSocket;
+  int addressSize;
   pthread_t sThread[3];
+  
   while(curCon < maxCon)
   {
       addressSize = sizeof(storage);
@@ -109,7 +111,7 @@ printf("listening...\n");
   {
     pthread_join(sThread[g], NULL);
   }
-
+  close(clientServer);
   printf("\nServer Program Finished\n");
   exit(0);
 
