@@ -45,22 +45,24 @@ int  main(int argc, char *argv[])
             exit(0);
 	  }
 	/* socket() call generates one socket for ipc */
+	  printf( "sock creating\n");
 	if ( (sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 	{
 		perror("Opening Stream Socket");
 		exit(1);
 	}
-
+	printf( "sock created\n");
 	/* address naming for the internet domain socket */
 	server.sin_family = AF_INET;
       	server.sin_port = htons(PORT_NUM);
       	server.sin_addr.s_addr = inet_addr(IP_ADDR);
-
+      	printf( "Connecting...\n");
 	/* use the socket and server address to initiate connection */
 	if( connect(sock, (struct sockaddr*)&server, sizeof(server))<0)	{
 		perror("connecting stream socket");
 		exit(1);
 	}
+	printf( "Connected\n");
 
 
 
