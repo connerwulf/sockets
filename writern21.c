@@ -1,6 +1,6 @@
-/* This is the client part for sending one file through network stream socket 
+/* This is the client part for sending one file through network stream socket
  and waiting for its return.  The server must be running on c4labpc20 in
-this version.  This writer can run anywhere. 
+this version.  This writer can run anywhere.
 To compile under the solaris version of cc.
 cc writern.c -lsocket -lxnet
 gcc writern.c -lsocket -lxnet
@@ -9,7 +9,7 @@ explicit library calls are required. This holds for grad.  You do not
 need the libraries for c4labpc24... Updated 3/13/21 */
 
 
-#include <sys/types.h> 
+#include <sys/types.h>
 #include <sys/socket.h>
 #include <stdlib.h>
 #include <fcntl.h>
@@ -18,11 +18,11 @@ need the libraries for c4labpc24... Updated 3/13/21 */
 #include <stdio.h>
 #include <unistd.h>
 
-#define IP_ADDR "131.247.3.8"   /* netcluster's IP address, where server 
+#define IP_ADDR "131.247.3.8"   /* netcluster's IP address, where server
                                     must run */
 /* For test #define PORT_NUM 1150 */
 /* #define PORT_NUM 1050 */
-#define PORT_NUM 1079
+#define PORT_NUM 1050
 #define BUFFLEN 100
 
 int  main(int argc, char *argv[])
@@ -66,7 +66,7 @@ int  main(int argc, char *argv[])
 		{
 		/* send the message throught communication socket */
 
-                write(0, buf, len);   
+                write(0, buf, len);
         printf("Connected and sending out a message of len %d\n", len);
         fflush(stdout);
 		if (send(sock, buf, len, 0) == -1)
@@ -86,4 +86,3 @@ int  main(int argc, char *argv[])
 	close(sock);
 
 }
-
