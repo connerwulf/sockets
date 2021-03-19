@@ -91,7 +91,7 @@ printf("listening...\n");
   int maxCon = 3;
   int curCon = 0;
   int acceptedSocket;
-  int addressSize;
+  socklen_t addressSize;
   pthread_t sThread[3];
 
   while(curCon < maxCon)
